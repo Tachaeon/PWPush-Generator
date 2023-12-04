@@ -1,6 +1,6 @@
 # PWPush Generator
 
-I have created a GUI application from Powershell using the PWpush.com API so that anyone can generate secure passwords from their desktop.
+A Powershell GUI application using the PWpush.com API so that anyone can generate secure passwords from their desktop.
 
 ## How to use
 PowerShell.exe -ExecutionPolicy Bypass -File .\PWPush_Generator.ps1
