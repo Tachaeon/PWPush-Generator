@@ -1,6 +1,6 @@
 # PWPush Generator
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Tachaeon/PWPush-Generator/main/screengrab.png" />
+  <img src="https://github.com/Tachaeon/PWPush-Generator/blob/main/images/screengrab.png" />
 </p>
 
 I have created a GUI application from Powershell using the PWpush.com API so that anyone can generate secure passwords from their desktop.
