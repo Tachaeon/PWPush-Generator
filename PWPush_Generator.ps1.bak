@@ -18,9 +18,9 @@ $ims.Write($IconBytes, 0, $IconBytes.Length)
 
 # Create form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "PWPush.com Generator 1.1"
+$form.Text = "PWPush.com Generator 1.0"
 $form.Width = 366
-$form.Height = 405
+$form.Height = 370
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
 $form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
 $form.MaximizeBox = $false  # Disable maximize button
@@ -59,21 +59,10 @@ $checkBox = New-Object System.Windows.Forms.CheckBox
 $checkBox.Text = "1-Click"
 $checkBox.Location = New-Object System.Drawing.Point(285, 14)
 
-# Create checkboxes for FirstView and KillSwitch
-$chkFirstView = New-Object System.Windows.Forms.CheckBox
-$chkFirstView.Text = "Delete on 1st View"
-$chkFirstView.AutoSize = $true
-$chkFirstView.Location = New-Object System.Drawing.Point(10, 43)
-
-$chkKillSwitch = New-Object System.Windows.Forms.CheckBox
-$chkKillSwitch.Text = "Viewer Can Delete"
-$chkKillSwitch.AutoSize = $true
-$chkKillSwitch.Location = New-Object System.Drawing.Point(175, 43)
-
 # Create a label to display the slider Days value
 $lblDays = New-Object System.Windows.Forms.Label
 $lblDays.Text = "Days: 7"
-$lblDays.Location = New-Object System.Drawing.Point(30, 90)
+$lblDays.Location = New-Object System.Drawing.Point(30, 55)
 $lblDays.Width = 80
 
 # Create the Day slider
@@ -81,7 +70,7 @@ $sliderDays = New-Object System.Windows.Forms.TrackBar
 $sliderDays.Minimum = 0
 $sliderDays.Maximum = 90
 $sliderDays.Value = 7
-$sliderDays.Location = New-Object System.Drawing.Point(100, 80)
+$sliderDays.Location = New-Object System.Drawing.Point(100, 45)
 $sliderDays.Width = 250
 
 # Add an event handler for the Day ValueChanged event
@@ -92,7 +81,7 @@ $sliderDays.add_ValueChanged({
 # Create a label to display the slider Views value
 $lblViews = New-Object System.Windows.Forms.Label
 $lblViews.Text = "Views: 5"
-$lblViews.Location = New-Object System.Drawing.Point(30, 130)
+$lblViews.Location = New-Object System.Drawing.Point(30, 95)
 $lblViews.Width = 80
 
 # Create the View slider
@@ -100,7 +89,7 @@ $sliderViews = New-Object System.Windows.Forms.TrackBar
 $sliderViews.Minimum = 0
 $sliderViews.Maximum = 100
 $sliderViews.Value = 5
-$sliderViews.Location = New-Object System.Drawing.Point(100, 120)
+$sliderViews.Location = New-Object System.Drawing.Point(100, 85)
 $sliderViews.Width = 250
 
 # Add an event handler for the View ValueChanged event
@@ -113,7 +102,7 @@ $btnGenerate = New-Object System.Windows.Forms.Button
 $btnGenerate.Text = "Generate Password"
 $btnGenerate.Width = 150
 $btnGenerate.Height = 36
-$btnGenerate.Location = New-Object System.Drawing.Point(105, 170)
+$btnGenerate.Location = New-Object System.Drawing.Point(105, 135)
 $btnGenerate.Add_Click({
         # Clear the outputTextBox
         $timer.Stop()
@@ -125,15 +114,17 @@ $btnGenerate.Add_Click({
         $PasswordLength = $txtPasswordLength.Text
         $Days = $sliderDays.Value
         $Views = $sliderViews.Value
+        Write-Host $Days
+        Write-Host $Views
         if ([int]::TryParse($PasswordLength, [ref]$null)) {
             $Password = New-RandomPassword $PasswordLength
             $outputTextBox.AppendText("$Password")
             if ($txtpassphrase.Text) {
                 $Passphrase = $txtpassphrase.Text
-                $PWPUSH = Publish-Password -Password $Password -Days $Days -Views $Views -Passphrase $Passphrase -FirstView:$chkFirstView.Checked -KillSwitch:$chkKillSwitch.Checked
+                $PWPUSH = Publish-Password -Password $Password -Days $Days -Views $Views -Passphrase $Passphrase
             }
             else {
-                $PWPUSH = Publish-Password -Password $Password -Days $Days -Views $Views -FirstView:$chkFirstView.Checked -KillSwitch:$chkKillSwitch.Checked
+                $PWPUSH = Publish-Password -Password $Password -Days $Days -Views $Views
             }
             if ($checkBox.Checked) {
                 $Result = $PWPUSH + $1click
@@ -171,7 +162,7 @@ $outputTextBox = New-Object System.Windows.Forms.TextBox
 $outputTextBox.Multiline = $true
 $outputTextBox.Width = 340
 $outputTextBox.Height = 49
-$outputTextBox.Location = New-Object System.Drawing.Point(5, 214)
+$outputTextBox.Location = New-Object System.Drawing.Point(5, 179)
 $outputTextBox.ReadOnly = $true
 $outputTextBox.TabStop = $false
 $outputTextBox.BackColor = [System.Drawing.Color]::White
@@ -180,14 +171,14 @@ $outputTextBox.BackColor = [System.Drawing.Color]::White
 $PWPushnotif = New-Object System.Windows.Forms.Label
 $PWPushnotif.Text = "PWPush URL:"
 $PWPushnotif.AutoSize = $true
-$PWPushnotif.Location = New-Object System.Drawing.Point(5, 272)
+$PWPushnotif.Location = New-Object System.Drawing.Point(5, 237)
 
 # Create textbox for pwpushurl
 $pwpushTextBox = New-Object System.Windows.Forms.TextBox
 $pwpushTextBox.Multiline = $true
 $pwpushTextBox.Width = 340
 $pwpushTextBox.Height = 20
-$pwpushTextBox.Location = New-Object System.Drawing.Point(5, 290)
+$pwpushTextBox.Location = New-Object System.Drawing.Point(5, 255)
 $pwpushTextBox.ReadOnly = $true
 $pwpushTextBox.TabStop = $false
 $pwpushTextBox.BackColor = [System.Drawing.Color]::White
@@ -197,7 +188,7 @@ $passClip = New-Object System.Windows.Forms.Button
 $passClip.Text = "Password to Clipboard"
 $passClip.Width = 110
 $passClip.Height = 36
-$passClip.Location = New-Object System.Drawing.Point(45, 324)
+$passClip.Location = New-Object System.Drawing.Point(45, 289)
 $passClip.Add_Click({
         Set-Clipboard $outputTextBox.Text
     })
@@ -207,37 +198,44 @@ $pwpushClip = New-Object System.Windows.Forms.Button
 $pwpushClip.Text = "PWPush URL to Clipboard"
 $pwpushClip.Width = 110
 $pwpushClip.Height = 36
-$pwpushClip.Location = New-Object System.Drawing.Point(200, 324)
+$pwpushClip.Location = New-Object System.Drawing.Point(200, 289)
 $pwpushClip.Add_Click({
         Set-Clipboard $pwpushTextBox.Text
     })
-
-# Pre-built character array at script scope — avoids rebuilding on every call
-$script:PasswordChars = [char[]]((48..57) + (65..90) + (97..122)) + @('!', '@', '#', '%', '^', '&', '*')
 
 # Function to generate a random password
 function New-RandomPassword {
     param(
         [Parameter(Mandatory = $true)]
         [Alias('length')]
-        [ValidateRange(1, [int]::MaxValue)]
+        [ValidateRange(1, [int]::MaxValue)]  # Set a valid range for password length
         [int]$PasswordLength
     )
-    return (-join (1..$PasswordLength | ForEach-Object { $script:PasswordChars | Get-Random }))
+    $validCharacters = 48..57 + 65..90 + 97..122 + (
+        '!', '@', '#', '%', '^', '&', '*'
+    ) | ForEach-Object { [char]$_ }
+
+    return (1..$PasswordLength | ForEach-Object {
+            Get-Random $validCharacters
+        }) -join ''
 }
 
 # Add controls to the form
-$form.Controls.AddRange(@(
-    $lblpassphrase, $txtpassphrase,
-    $lblPasswordLength, $txtPasswordLength,
-    $checkBox, $chkFirstView, $chkKillSwitch,
-    $lblDays, $sliderDays,
-    $lblViews, $sliderViews,
-    $btnGenerate,
-    $outputTextBox,
-    $PWPushnotif, $pwpushTextBox,
-    $passClip, $pwpushClip
-))
+$form.Controls.Add($lblpassphrase)
+$form.Controls.Add($txtpassphrase)
+$form.Controls.Add($lblPasswordLength)
+$form.Controls.Add($txtPasswordLength)
+$form.Controls.Add($checkbox)
+$form.Controls.Add($lblDays)
+$form.Controls.Add($sliderDays)
+$form.Controls.Add($lblViews)
+$form.Controls.Add($sliderViews)
+$form.Controls.Add($btnGenerate)
+$form.Controls.Add($outputTextBox)
+$form.Controls.Add($PWPushnotif)
+$form.Controls.Add($pwpushTextBox)
+$form.Controls.Add($passClip)
+$form.Controls.Add($pwpushClip)
 
 function ConvertFrom-SecurePassword {
     param (
